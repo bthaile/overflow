@@ -197,6 +197,18 @@ func ProposeAs(proposer string) InteractionOption {
 	}
 }
 
+// set the payer
+func PayAs(proposer string) InteractionOption {
+	return func(ftb *FlowInteractionBuilder) {
+		account, err := ftb.Overflow.AccountE(proposer)
+		if err != nil {
+			ftb.Error = err
+			return
+		}
+		ftb.Payer = account
+	}
+}
+
 // set the propser to be the service account
 func ProposeAsServiceAccount() InteractionOption {
 	return func(ftb *FlowInteractionBuilder) {
@@ -216,6 +228,40 @@ func SignProposeAndPayAs(signer string) InteractionOption {
 		}
 		ftb.Payer = account
 		ftb.Proposer = account
+	}
+}
+
+/*
+
+// set an aditional authorizer that will sign the payload
+func PayloadSigner(signer ...string) InteractionOption {
+	return func(ftb *FlowInteractionBuilder) {
+		for _, signer := range signer {
+			account, err := ftb.Overflow.AccountE(signer)
+			if err != nil {
+				ftb.Error = err
+				return
+			}
+			ftb.PayloadSigners = append(ftb.PayloadSigners, account)
+		}
+	}
+}
+*/
+
+// first time we call set Payer/Proposer subsequent calls set Authorizer only
+func SignAs(signer string) InteractionOption {
+	return func(ftb *FlowInteractionBuilder) {
+		account, err := ftb.Overflow.AccountE(signer)
+		if err != nil {
+			ftb.Error = err
+			return
+		}
+		if ftb.Proposer == nil {
+			ftb.Payer = account
+			ftb.Proposer = account
+		} else {
+			ftb.PayloadSigners = append(ftb.PayloadSigners, account)
+		}
 	}
 }
 
