@@ -112,6 +112,7 @@ func (o *OverflowBuilder) StartE() (*OverflowState, error) {
 	loader := &afero.Afero{Fs: afero.NewOsFs()}
 	var state *flowkit.State
 	var err error
+	//TODO: this does not work
 	if o.UseDefaultFlowJson {
 		state, err = flowkit.Init(loader, crypto.ECDSAP256, hash.SHA3_256)
 		if err != nil {

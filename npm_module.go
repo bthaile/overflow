@@ -1,12 +1,16 @@
 package overflow
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/onflow/cadence/runtime/ast"
 	"github.com/onflow/cadence/runtime/cmd"
 	"github.com/onflow/cadence/runtime/common"
+	"github.com/onflow/cadence/runtime/parser"
+	"github.com/onflow/cadence/runtime/parser/lexer"
 	"github.com/onflow/cadence/runtime/sema"
+	"github.com/sanity-io/litter"
 )
 
 // NPM Module
@@ -135,7 +139,9 @@ func (s *OverflowSolution) MergeSpecAndCode() *OverflowSolutionMerged {
 }
 
 func declarationInfo(codeFileName string, code []byte) *OverflowDeclarationInfo {
+
 	params := params(codeFileName, code)
+
 	if params == nil {
 		return &OverflowDeclarationInfo{
 			ParameterOrder: []string{},
@@ -161,10 +167,25 @@ func declarationInfo(codeFileName string, code []byte) *OverflowDeclarationInfo 
 }
 
 func params(fileName string, code []byte) *ast.ParameterList {
+	debug := strings.Contains(fileName, "listNFTForSale.cdc")
+	if debug {
+		fmt.Println(fileName)
 
+	}
 	codes := map[common.Location]string{}
 	location := common.StringLocation(fileName)
 	program, _ := cmd.PrepareProgram(string(code), location, codes)
+	if debug {
+
+		tokens := lexer.Lex(string(code), nil)
+		litter.Dump(tokens)
+		program, err := parser.ParseProgram(string(code), nil)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		litter.Dump(err)
+		litter.Dump(program)
+	}
 
 	transactionDeclaration := program.SoleTransactionDeclaration()
 	if transactionDeclaration != nil {
