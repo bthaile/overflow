@@ -25,6 +25,7 @@ import (
 	"github.com/onflow/flow-go-sdk"
 	"github.com/onflow/flow-go-sdk/crypto"
 	"github.com/pkg/errors"
+	"github.com/sanity-io/litter"
 	"golang.org/x/exp/slices"
 )
 
@@ -81,10 +82,17 @@ type OverflowState struct {
 func (o *OverflowState) parseArguments(fileName string, code []byte, inputArgs map[string]interface{}) ([]cadence.Value, error) {
 	var resultArgs []cadence.Value = make([]cadence.Value, 0)
 
+	fmt.Println("filename ", fileName)
+	debug := strings.Contains(fileName, "acceptDirectOfferSoft")
+
 	codes := map[common.Location]string{}
 	location := common.StringLocation(fileName)
 	program, must := cmd.PrepareProgram(string(code), location, codes)
 	checker, _ := cmd.PrepareChecker(program, location, codes, nil, must)
+	if debug {
+		litter.Dump(program)
+		os.Exit(1)
+	}
 
 	var parameterList []*ast.Parameter
 
