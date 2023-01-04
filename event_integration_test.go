@@ -6,11 +6,13 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestIntegrationEvents(t *testing.T) {
 
 	t.Run("Test that from index cannot be negative", func(t *testing.T) {
+<<<<<<< HEAD
 		g, err := OverflowTesting()
 		assert.NoError(t, err)
 
@@ -26,11 +28,26 @@ func TestIntegrationEvents(t *testing.T) {
 			WithFromIndex(-10),
 			WithEvent("A.0ae53cb6e3f42a79.FlowToken.TokensMinted"),
 		)
+=======
+		g, err := NewTestingEmulator().StartE()
+		require.NoError(t, err)
+		g.TransactionFromFile("mint_tokens").
+			SignProposeAndPayAsService().
+			Args(g.Arguments().
+				Account("first").
+				UFix64(100.0)).
+			Test(t).
+			AssertSuccess().
+			AssertEventCount(3)
+
+		_, err = g.EventFetcher().End(2).From(-10).Event("A.0ae53cb6e3f42a79.FlowToken.TokensMinted").Run()
+>>>>>>> main
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "FromIndex is negative")
 	})
 
 	t.Run("Fetch last events", func(t *testing.T) {
+<<<<<<< HEAD
 		g, err := OverflowTesting()
 		assert.NoError(t, err)
 		g.Tx("mint_tokens",
@@ -39,6 +56,19 @@ func TestIntegrationEvents(t *testing.T) {
 			WithArg("amount", 100.0),
 		).AssertSuccess(t).
 			AssertEventCount(t, 3)
+=======
+
+		g, err := NewTestingEmulator().StartE()
+		require.NoError(t, err)
+		g.TransactionFromFile("mint_tokens").
+			SignProposeAndPayAsService().
+			Args(g.Arguments().
+				Account("first").
+				UFix64(100.0)).
+			Test(t).
+			AssertSuccess().
+			AssertEventCount(3)
+>>>>>>> main
 
 		ev, err := g.FetchEvents(WithLastBlocks(2), WithEvent("A.0ae53cb6e3f42a79.FlowToken.TokensMinted"))
 		assert.NoError(t, err)
@@ -46,6 +76,20 @@ func TestIntegrationEvents(t *testing.T) {
 	})
 
 	t.Run("Fetch last events and sort them ", func(t *testing.T) {
+<<<<<<< HEAD
+=======
+
+		g, err := NewTestingEmulator().StartE()
+		require.NoError(t, err)
+		g.TransactionFromFile("mint_tokens").
+			SignProposeAndPayAsService().
+			Args(g.Arguments().
+				Account("first").
+				UFix64(100.0)).
+			Test(t).
+			AssertSuccess().
+			AssertEventCount(3)
+>>>>>>> main
 
 		g, err := OverflowTesting()
 		assert.NoError(t, err)
@@ -70,6 +114,19 @@ func TestIntegrationEvents(t *testing.T) {
 	})
 
 	t.Run("Fetch last write progress file", func(t *testing.T) {
+<<<<<<< HEAD
+=======
+		g, err := NewTestingEmulator().StartE()
+		require.NoError(t, err)
+		g.TransactionFromFile("mint_tokens").
+			SignProposeAndPayAsService().
+			Args(g.Arguments().
+				Account("first").
+				UFix64(100.0)).
+			Test(t).
+			AssertSuccess().
+			AssertEventCount(3)
+>>>>>>> main
 
 		g, err := OverflowTesting()
 		assert.NoError(t, err)
@@ -90,10 +147,16 @@ func TestIntegrationEvents(t *testing.T) {
 		err := os.WriteFile("progress", []byte("invalid"), fs.ModePerm)
 		assert.NoError(t, err)
 
+<<<<<<< HEAD
 		g, err := OverflowTesting()
 		assert.NoError(t, err)
 
 		_, err = g.FetchEvents(WithEvent("A.0ae53cb6e3f42a79.FlowToken.TokensMinted"), WithTrackProgressIn("progress"))
+=======
+		g, err := NewTestingEmulator().StartE()
+		require.NoError(t, err)
+		_, err = g.EventFetcher().Event("A.0ae53cb6e3f42a79.FlowToken.TokensMinted").TrackProgressIn("progress").Run()
+>>>>>>> main
 		defer os.Remove("progress")
 		assert.Error(t, err)
 		assert.Equal(t, "could not parse progress file as block height strconv.ParseInt: parsing \"invalid\": invalid syntax", err.Error())
@@ -104,6 +167,7 @@ func TestIntegrationEvents(t *testing.T) {
 		err := os.WriteFile("progress", []byte("1"), fs.ModePerm)
 		assert.NoError(t, err)
 
+<<<<<<< HEAD
 		g, err := OverflowTesting()
 		assert.NoError(t, err)
 		g.Tx("mint_tokens",
@@ -112,6 +176,18 @@ func TestIntegrationEvents(t *testing.T) {
 			WithArg("amount", 100.0),
 		).AssertSuccess(t).
 			AssertEventCount(t, 3)
+=======
+		g, err := NewTestingEmulator().StartE()
+		require.NoError(t, err)
+		g.TransactionFromFile("mint_tokens").
+			SignProposeAndPayAsService().
+			Args(g.Arguments().
+				Account("first").
+				UFix64(100.0)).
+			Test(t).
+			AssertSuccess().
+			AssertEventCount(3)
+>>>>>>> main
 
 		ev, err := g.FetchEvents(WithEvent("A.0ae53cb6e3f42a79.FlowToken.TokensMinted"), WithTrackProgressIn("progress"))
 		defer os.Remove("progress")

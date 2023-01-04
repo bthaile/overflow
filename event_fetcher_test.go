@@ -5,12 +5,18 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestEventFetcher(t *testing.T) {
 
+<<<<<<< HEAD
 	g, err := OverflowTesting()
 	assert.NoError(t, err)
+=======
+	g, err := NewTestingEmulator().StartE()
+	require.NoError(t, err)
+>>>>>>> main
 
 	t.Run("Start argument", func(t *testing.T) {
 		ef := g.buildEventInteraction(WithStartHeight(100))

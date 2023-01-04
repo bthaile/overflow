@@ -6,11 +6,17 @@ import (
 	"github.com/hexops/autogold"
 	"github.com/sanity-io/litter"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseConfig(t *testing.T) {
+<<<<<<< HEAD
 	g, err := OverflowTesting()
 	assert.NoError(t, err)
+=======
+	g, err := NewTestingEmulator().StartE()
+	require.NoError(t, err)
+>>>>>>> main
 	t.Parallel()
 
 	t.Run("parse", func(t *testing.T) {

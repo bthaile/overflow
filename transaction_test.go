@@ -7,8 +7,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+<<<<<<< HEAD
 func TestTransaction(t *testing.T) {
 	o, _ := OverflowTesting()
+=======
+/*
+Tests must be in the same folder as flow.json with contracts and transactions/scripts in subdirectories in order for the path resolver to work correctly
+*/
+func TestTransactionArguments(t *testing.T) {
+	g := NewTestingEmulator().Start()
+	t.Parallel()
+>>>>>>> main
 
 	t.Run("Run simple tx", func(t *testing.T) {
 		res := o.Tx("arguments", WithArg("test", "foo"), WithSignerServiceAccount())
